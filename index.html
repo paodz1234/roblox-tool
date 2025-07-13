@@ -139,6 +139,9 @@
       box-shadow: 0 4px 20px rgba(0,0,0,0.2);
       z-index: 300;
     }
+    .avatar-section {
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -178,7 +181,7 @@
     </div>
   </div>
 
-  <div class="success-popup" id="successPopup">
+  <div class="success-popup" id="successPopup" style="display:none">
     <p style="font-size: 18px; font-weight: bold;">✅ Success!<br>Your order has been created.</p>
     <button class="btn" onclick="closePopup()">Done</button>
   </div>
