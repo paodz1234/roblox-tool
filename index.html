@@ -12,6 +12,7 @@
       padding: 0;
       background: #f8f9fa;
       text-align: center;
+      transition: opacity 0.6s ease;
     }
     .header {
       background: url('https://i.ibb.co/GQ4F1LfW/fb033297-d245-4f86-b70d-f515a702ee69-1.jpg') center/cover no-repeat;
@@ -70,13 +71,20 @@
       animation: spin 1s linear infinite;
       margin-bottom: 10px;
     }
-    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
     .loading-overlay p {
       font-size: 24px;
       font-weight: bold;
       animation: blink 1s infinite;
     }
-    @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+    @keyframes blink {
+      0% { opacity: 1; }
+      50% { opacity: 0.3; }
+      100% { opacity: 1; }
+    }
     .robux-options {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -97,8 +105,13 @@
       justify-content: center;
       gap: 6px;
     }
-    .robux-options button.selected { border-color: #28a745; }
-    .robux-options button img { width: 20px; height: 20px; }
+    .robux-options button.selected {
+      border-color: #28a745;
+    }
+    .robux-options button img {
+      width: 20px;
+      height: 20px;
+    }
     .robux-input {
       width: 60%;
       padding: 12px;
@@ -130,7 +143,9 @@
       box-shadow: 0 4px 20px rgba(0,0,0,0.2);
       z-index: 300;
     }
-    .avatar-section { display: none; }
+    .avatar-section {
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -141,7 +156,7 @@
     <p>Loading<span class="dots">...</span></p>
   </div>
 
-  <div class="tool-container">
+  <div class="tool-container" id="mainPage">
     <input type="text" id="username" placeholder="Enter your Roblox username">
     <br>
     <button class="btn" onclick="onSearch()">Search</button>
@@ -160,23 +175,29 @@
 
       <p>Or select a predefined amount:</p>
       <div class="robux-options">
-        <button onclick="setRobux(800, this)"><img src="https://i.ibb.co/mCJ8DPSy/9b9a5661-e23a-4e7c-94ad-836392bf8995-1.jpg">800</button>
-        <button onclick="setRobux(1700, this)"><img src="https://i.ibb.co/mCJ8DPSy/9b9a5661-e23a-4e7c-94ad-836392bf8995-1.jpg">1,700</button>
-        <button onclick="setRobux(4500, this)"><img src="https://i.ibb.co/mCJ8DPSy/9b9a5661-e23a-4e7c-94ad-836392bf8995-1.jpg">4,500</button>
-        <button onclick="setRobux(10000, this)"><img src="https://i.ibb.co/mCJ8DPSy/9b9a5661-e23a-4e7c-94ad-836392bf8995-1.jpg">10,000</button>
+        <button onclick="setRobux(800, this)"><img src="https://i.ibb.co/mCJ8DPSy/9b9a5661-e23a-4e7c-94ad-836392bf8995-1.jpg" alt="icon">800</button>
+        <button onclick="setRobux(1700, this)"><img src="https://i.ibb.co/mCJ8DPSy/9b9a5661-e23a-4e7c-94ad-836392bf8995-1.jpg" alt="icon">1,700</button>
+        <button onclick="setRobux(4500, this)"><img src="https://i.ibb.co/mCJ8DPSy/9b9a5661-e23a-4e7c-94ad-836392bf8995-1.jpg" alt="icon">4,500</button>
+        <button onclick="setRobux(10000, this)"><img src="https://i.ibb.co/mCJ8DPSy/9b9a5661-e23a-4e7c-94ad-836392bf8995-1.jpg" alt="icon">10,000</button>
       </div>
 
-      <button class="btn" id="confirmBtn" style="background: #28a745; margin-top: 20px;" onclick="onConfirm()">Confirm</button>
+      <button class="btn" style="background: #28a745; margin-top: 20px;" onclick="onConfirm()">Confirm</button>
     </div>
   </div>
 
   <div class="success-popup" id="successPopup" style="display:none">
     <p style="font-size: 18px; font-weight: bold;">✅ Success!<br>Your order has been created.</p>
-    <button class="btn" onclick="goToDetails()">Done</button>
+    <button class="btn" onclick="goToResultPage()">Done</button>
+  </div>
+
+  <div id="resultPage" style="display:none; padding:20px;">
+    <img id="finalAvatar" src="" alt="Avatar" width="120" style="border-radius:50%;">
+    <h2 id="finalName"></h2>
+    <p id="resultInfo" style="white-space: pre-line; text-align:left; max-width:400px; margin:auto;"></p>
   </div>
 
   <script>
-    let savedData = {};
+    let storedData = {};
 
     function toggleLoading(show) {
       document.getElementById('loadingOverlay').style.display = show ? 'flex' : 'none';
@@ -206,13 +227,13 @@
           const avatarResp = await fetch(`https://thumbnails.roproxy.com/v1/users/avatar-headshot?userIds=${user.id}&size=150x150&format=Png&isCircular=false`);
           const avatarData = await avatarResp.json();
 
+          storedData.username = username;
+          storedData.displayName = user.displayName;
+          storedData.avatarUrl = avatarData.data[0].imageUrl;
+
           document.getElementById('displayName').innerText = `${user.displayName} (@${username})`;
-          document.getElementById('avatarImg').src = avatarData.data[0].imageUrl;
+          document.getElementById('avatarImg').src = storedData.avatarUrl;
           document.getElementById('avatarSection').style.display = 'block';
-
-          savedData.username = user.displayName + " (@" + username + ")";
-          savedData.avatar = avatarData.data[0].imageUrl;
-
         } catch {
           alert('⚠️ Error loading data.');
         } finally {
@@ -223,10 +244,11 @@
 
     function onConfirm() {
       const amount = document.getElementById('robuxAmount').value;
+      const type = document.querySelector('input[name="robloxType"]:checked').value;
       if (!amount || isNaN(amount)) return alert("Please enter a valid Robux amount");
 
-      const robloxType = document.querySelector('input[name="robloxType"]:checked').value;
-      savedData.robloxType = robloxType;
+      storedData.amount = amount;
+      storedData.type = type;
 
       toggleLoading(true);
       setTimeout(() => {
@@ -241,23 +263,30 @@
       btn.classList.add('selected');
     }
 
-    function goToDetails() {
-      const now = new Date();
-      const vnTime = now.toLocaleString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh" });
+    function goToResultPage() {
+      document.body.style.opacity = "0";
+      setTimeout(() => {
+        document.getElementById('mainPage').style.display = 'none';
+        document.getElementById('successPopup').style.display = 'none';
+        document.getElementById('resultPage').style.display = 'block';
 
-      const detailsHTML = `
-        <div style="text-align:center; font-family:Poppins,sans-serif; padding:20px;">
-          <img src="${savedData.avatar}" style="border-radius:50%; width:100px; height:100px;"><br>
-          <h2>${savedData.username}</h2>
-          <p>Đã done cho : ${savedData.username}</p>
-          <p>Hình thức : VND</p>
-          <p>Bản Roblox : ${savedData.robloxType}</p>
-          <p>Tình trạng đơn : Thành công</p>
-          <p>Tình trạng done : Chờ duyệt ( 1h - 72h )</p>
-          <p>Ngày tạo : ${vnTime}</p>
-        </div>
-      `;
-      document.body.innerHTML = detailsHTML;
+        document.getElementById('finalAvatar').src = storedData.avatarUrl;
+        document.getElementById('finalName').innerText = `${storedData.displayName} (@${storedData.username})`;
+
+        const now = new Date();
+        const vnTime = now.toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
+
+        document.getElementById('resultInfo').innerText =
+          `Đã done cho: ${storedData.username}
+Hình thức: VND
+Bản Roblox: ${storedData.type}
+Số lượng: ${storedData.amount} Robux
+Tình trạng đơn: Thành công
+Tình trạng done: Chờ duyệt (1h - 72h)
+Ngày tạo: ${vnTime}`;
+
+        document.body.style.opacity = "1";
+      }, 600);
     }
   </script>
 </body>
