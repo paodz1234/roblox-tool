@@ -1,236 +1,270 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Receive Robux</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 <style>
-  body {
-    font-family: 'Segoe UI', sans-serif;
-    margin: 0;
-    padding: 0;
-    background: #f8f9fa;
-    text-align: center;
+  :root{ --green:#28a745; --orange:#ff9800; --card:#fff; --muted:#666; --border:#e6e6e6; --maxw:520px; }
+  *{box-sizing:border-box}
+  body{ font-family:"Poppins",sans-serif; margin:0; background:#f6f7fb; color:#222; text-align:center; -webkit-font-smoothing:antialiased; }
+  .header{
+    background: url('https://i.ibb.co/GQ4F1LfW/fb033297-d245-4f86-b70d-f515a702ee69-1.jpg') center/cover no-repeat;
+    background-color:#111;
+    padding:88px 16px 56px;
+    color:#fff; font-size:36px; font-weight:700; text-shadow:1px 1px 8px rgba(0,0,0,.6);
   }
-  .header {
-    background: url('https://i.ibb.co/g9B7vkM/robux-banner.jpg') center/cover no-repeat;
-    background-color: #1a1a1a;
-    padding: 100px 20px 60px;
-    color: white;
-    font-size: 42px;
-    font-weight: bold;
-    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+  .wrap{ max-width:var(--maxw); margin:22px auto; padding:0 14px; }
+
+  .card{
+    background:var(--card); border-radius:14px; padding:22px; box-shadow:0 10px 28px rgba(12,12,20,.06);
   }
-  .tool-container {
-    background: #fff;
-    max-width: 480px;
-    margin: 30px auto;
-    padding: 30px;
-    border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+
+  input[type="text"], input[type="number"]{
+    width:78%; padding:12px 14px; border-radius:10px; border:1px solid var(--border); font-size:15px;
   }
-  input[type=text] {
-    width: 80%;
-    padding: 12px;
-    font-size: 16px;
-    margin-bottom: 16px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
+  .btn{
+    display:inline-block; padding:10px 18px; border-radius:10px; background:#111; color:#fff; border:none; cursor:pointer; font-weight:700;
   }
-  .btn {
-    padding: 10px 22px;
-    background: black;
-    color: white;
-    font-size: 16px;
-    border-radius: 10px;
-    cursor: pointer;
-    border: none;
+
+  /* avatar & spacing */
+  .avatar-wrap{ display:none; margin-top:18px; }
+  .avatar-img{ width:96px; height:96px; border-radius:50%; object-fit:cover; display:block; margin: 0 auto; }
+  .display-name{ margin-top:10px; font-weight:700; font-size:16px; }
+
+  .radio-group{ display:flex; justify-content:center; gap:16px; margin:12px 0; font-weight:600; color:var(--muted); }
+
+  /* robux buttons */
+  .robux-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:8px; }
+  .rob-btn{
+    display:flex; align-items:center; justify-content:center; gap:10px;
+    padding:12px; border-radius:10px; border:1px solid var(--border); background:#fff; cursor:pointer; font-weight:600;
   }
-  .loading, .avatar-section, .success-popup, .order-info {
-    display: none;
-    margin-top: 20px;
+  .rob-btn.selected{ border-color:var(--green); background:#f0fff4; }
+
+  /* loading overlay (CSS spinner) */
+  .loading-overlay{ position:fixed; inset:0; background:rgba(255,255,255,.85); display:none; z-index:999; align-items:center; justify-content:center; flex-direction:column; }
+  .spinner{
+    width:56px; height:56px; border-radius:50%; border:6px solid #f3f3f3; border-top-color:var(--green); animation:spin 1s linear infinite; margin-bottom:10px;
   }
-  .loading img {
-    width: 50px;
-    height: 50px;
-    filter: brightness(0) invert(1);
-  }
-  .avatar-section {
-    margin-top: 30px;
-  }
-  .avatar-section p {
-    margin: 10px 0;
-  }
-  .robux-options {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-top: 10px;
-  }
-  .robux-options button {
-    padding: 14px;
-    width: 45%;
-    margin: 10px 5px;
-    font-size: 16px;
-    border: 2px solid #ccc;
-    border-radius: 10px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    background-color: #f9f9f9;
-  }
-  .robux-options button.selected {
-    border-color: #28a745;
-    background-color: #e6ffe6;
-  }
-  .robux-icon {
-    width: 24px;
-    height: 24px;
-  }
-  .success-popup {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: white;
-    padding: 30px;
-    border-radius: 14px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-    z-index: 100;
-  }
-  .order-info {
-    border: 2px solid #ccc;
-    border-radius: 10px;
-    padding: 15px;
-    text-align: left;
-    background: #fff;
-  }
-  .order-info div {
-    padding: 8px 10px;
-    border-bottom: 1px solid #ddd;
-  }
-  .order-info div:last-child {
-    border-bottom: none;
-  }
-  .status-success {
-    color: white;
-    background: #28a745;
-    padding: 3px 8px;
-    border-radius: 5px;
-    font-weight: bold;
-  }
-  .status-pending {
-    color: white;
-    background: #ff9800;
-    padding: 3px 8px;
-    border-radius: 5px;
-    font-weight: bold;
+  @keyframes spin{ to{ transform:rotate(360deg);} }
+
+  /* success popup */
+  .overlay{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.36); z-index:1000; }
+  .popup{ background:var(--card); border-radius:12px; padding:18px; max-width:420px; width:92%; box-shadow:0 12px 30px rgba(0,0,0,.16); text-align:center; }
+  .popup h3{ margin:6px 0 8px; }
+
+  /* order-info box (vuông) */
+  .order-box{ border:1px solid var(--border); border-radius:10px; text-align:left; overflow:hidden; background:#fff; margin:12px 0; }
+  .order-row{ display:flex; justify-content:space-between; align-items:center; padding:12px 14px; border-bottom:1px solid var(--border); font-size:15px; }
+  .order-row:last-child{ border-bottom:none; }
+  .label{ color:var(--muted); }
+  .value{ font-weight:700; color:#111; }
+  .pill{ padding:6px 10px; border-radius:999px; color:#fff; font-weight:800; font-size:13px; }
+  .pill.success{ background:var(--green); }
+  .pill.pending{ background:var(--orange); }
+
+  /* result page */
+  #resultPage{ display:none; padding:18px; }
+  #resultCard{ background:var(--card); border-radius:12px; padding:18px; max-width:480px; margin:0 auto; box-shadow:0 10px 30px rgba(0,0,0,.06); text-align:center; }
+  #resultCard img{ width:120px; height:120px; border-radius:50%; object-fit:cover; margin-bottom:12px; }
+  #backBtn{ margin-top:12px; background:#f2f2f2; color:#111; border-radius:10px; padding:8px 14px; border:none; cursor:pointer; }
+
+  /* fade */
+  .fadeOut{ opacity:0; transition:opacity .45s ease; }
+  .fadeIn{ opacity:1; transition:opacity .45s ease; }
+
+  /* small screens */
+  @media(max-width:420px){
+    .header{ font-size:28px; padding:64px 10px 44px; }
+    input[type="text"], input[type="number"]{ width:100%; }
+    .robux-grid{ grid-template-columns:1fr 1fr; }
   }
 </style>
 </head>
 <body>
+  <div class="header">Receive Robux</div>
 
-<div class="header">Receive Robux</div>
+  <div class="wrap">
+    <div class="card" id="mainCard">
+      <input id="username" type="text" placeholder="Nhập username Roblox (ví dụ: abc123)">
+      <div style="margin-top:10px;">
+        <button class="btn" onclick="onSearch()">Search</button>
+      </div>
 
-<div class="tool-container">
-  <input type="text" id="username" placeholder="Enter your Roblox username"><br>
-  <button class="btn" onclick="searchUser()">Search</button>
+      <div class="avatar-wrap" id="avatarWrap">
+        <img id="avatarImg" class="avatar-img" src="" alt="avatar">
+        <div id="displayName" class="display-name"></div>
 
-  <div class="loading" id="loadingSpinner">
-    <img src="https://i.ibb.co/yXrSC0T/spinner-white.gif" alt="Loading">
-  </div>
+        <div class="radio-group">
+          <label><input type="radio" name="robloxType" value="Roblox" checked> Roblox</label>
+          <label><input type="radio" name="robloxType" value="Roblox VNG"> Roblox VNG</label>
+        </div>
 
-  <div class="avatar-section" id="avatarSection">
-    <img id="avatarImg" src="" alt="Avatar" width="100" style="border-radius:50%;margin:20px 0;">
-    <div id="displayName" style="font-size:20px;font-weight:bold;"></div>
-    <p>Select Robux amount</p>
-    <div class="robux-options">
-      <button onclick="selectAmount(800)">
-        <img class="robux-icon" src="https://i.ibb.co/7NJ5JC8/robux-icon.png" alt="Robux">800
-      </button>
-      <button onclick="selectAmount(1700)">
-        <img class="robux-icon" src="https://i.ibb.co/7NJ5JC8/robux-icon.png" alt="Robux">1,700
-      </button>
-      <button onclick="selectAmount(4500)">
-        <img class="robux-icon" src="https://i.ibb.co/7NJ5JC8/robux-icon.png" alt="Robux">4,500
-      </button>
-      <button onclick="selectAmount(10000)">
-        <img class="robux-icon" src="https://i.ibb.co/7NJ5JC8/robux-icon.png" alt="Robux">10,000
-      </button>
+        <div style="margin-top:6px;">
+          <input id="robuxInput" type="number" placeholder="Nhập số Robux (ví dụ: 800)">
+        </div>
+
+        <p style="margin:10px 0 6px; color:var(--muted); font-weight:600;">Hoặc chọn số có sẵn</p>
+        <div class="robux-grid">
+          <button class="rob-btn" onclick="setRobux(800,this)"><img src="https://i.ibb.co/mCJ8DPSy/9b9a5661-e23a-4e7c-94ad-836392bf8995-1.jpg" style="width:20px;height:20px">800</button>
+          <button class="rob-btn" onclick="setRobux(1700,this)"><img src="https://i.ibb.co/mCJ8DPSy/9b9a5661-e23a-4e7c-94ad-836392bf8995-1.jpg" style="width:20px;height:20px">1,700</button>
+          <button class="rob-btn" onclick="setRobux(4500,this)"><img src="https://i.ibb.co/mCJ8DPSy/9b9a5661-e23a-4e7c-94ad-836392bf8995-1.jpg" style="width:20px;height:20px">4,500</button>
+          <button class="rob-btn" onclick="setRobux(10000,this)"><img src="https://i.ibb.co/mCJ8DPSy/9b9a5661-e23a-4e7c-94ad-836392bf8995-1.jpg" style="width:20px;height:20px">10,000</button>
+        </div>
+
+        <div style="margin-top:14px;">
+          <button id="confirmBtn" class="btn" style="background:var(--green)" onclick="onConfirm()">Confirm</button>
+        </div>
+      </div>
     </div>
-
-    <button class="btn" id="confirmBtn" style="background:#28a745;margin-top:20px;display:none;" onclick="confirmOrder()">Confirm</button>
   </div>
 
-  <div class="success-popup" id="successPopup">
-    <p style="font-size:18px;font-weight:bold;">✅ Success!<br>Your order has been created.</p>
-    <button class="btn" onclick="showOrderInfo()">Done</button>
+  <!-- Loading overlay (used for both search and confirm) -->
+  <div class="loading-overlay" id="loadingOverlay" role="status" aria-hidden="true" style="display:none; align-items:center;">
+    <div class="spinner" aria-hidden="true"></div>
+    <div style="font-weight:700; color:#333; margin-top:6px;">Đang xử lý...</div>
   </div>
 
-  <div class="order-info" id="orderInfo"></div>
-</div>
+  <!-- Success popup -->
+  <div class="overlay" id="overlay" aria-hidden="true" style="display:none;">
+    <div class="popup" role="dialog" aria-modal="true">
+      <h3>✅ Success</h3>
+      <div id="popupName" style="font-weight:700; margin-bottom:8px;">Tên người dùng</div>
+
+      <div class="order-box" style="max-width:420px; margin:0 auto;">
+        <div class="order-row"><span class="label">Hình thức</span><span class="value">VND</span></div>
+        <div class="order-row"><span class="label">Bản Roblox</span><span class="value" id="popupVersion">Roblox</span></div>
+        <div class="order-row"><span class="label">Số lượng</span><span class="value" id="popupAmount">800 Robux</span></div>
+        <div class="order-row"><span class="label">Tình trạng đơn</span><span class="value"><span class="pill success">Thành công</span></span></div>
+        <div class="order-row"><span class="label">Tình trạng done</span><span class="value"><span class="pill pending">Chờ duyệt (1h - 72h)</span></span></div>
+        <div class="order-row"><span class="label">Ngày tạo</span><span class="value" id="popupDate">--</span></div>
+      </div>
+
+      <div style="margin-top:12px;"><button class="btn" onclick="goToResult()">Done</button></div>
+    </div>
+  </div>
+
+  <!-- Result page -->
+  <div id="resultPage" style="display:none;">
+    <div id="resultCard">
+      <img id="resultAvatar" src="" alt="avatar">
+      <div id="resultName" style="font-weight:700; margin-bottom:8px;"></div>
+
+      <div class="order-box" style="max-width:420px; margin:0 auto;">
+        <div class="order-row"><span class="label">Đã done cho</span><span class="value" id="r_donefor">-</span></div>
+        <div class="order-row"><span class="label">Hình thức</span><span class="value">VND</span></div>
+        <div class="order-row"><span class="label">Bản Roblox</span><span class="value" id="r_version">-</span></div>
+        <div class="order-row"><span class="label">Số lượng</span><span class="value" id="r_amount">-</span></div>
+        <div class="order-row"><span class="label">Tình trạng đơn</span><span class="value"><span class="pill success">Thành công</span></span></div>
+        <div class="order-row"><span class="label">Tình trạng done</span><span class="value"><span class="pill pending" id="r_pending">Chờ duyệt (1h - 72h)</span></span></div>
+        <div class="order-row"><span class="label">Ngày tạo</span><span class="value" id="r_date">-</span></div>
+      </div>
+
+      <button id="backBtn" onclick="goBack()" style="margin-top:14px;">⟵ Quay lại</button>
+    </div>
+  </div>
 
 <script>
-  let selectedAmount = 0;
-  let savedName = "";
-  function searchUser() {
+  let state = { username:'', displayName:'', avatar:'', robloxType:'Roblox', amount:0 };
+
+  // helpers
+  function showLoading(show){
+    document.getElementById('loadingOverlay').style.display = show ? 'flex' : 'none';
+  }
+  function showOverlay(show){
+    document.getElementById('overlay').style.display = show ? 'flex' : 'none';
+  }
+
+  async function onSearch(){
     const username = document.getElementById('username').value.trim();
-    if (!username) return alert("Please enter a Roblox username");
-    document.getElementById('loadingSpinner').style.display = 'block';
-    document.getElementById('avatarSection').style.display = 'none';
-    setTimeout(async () => {
-      try {
-        const res = await fetch("https://users.roproxy.com/v1/usernames/users", {
-          method: 'POST', headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({usernames:[username]})
-        });
-        const data = await res.json();
-        if (!data.data?.length) { alert("Username not found"); return; }
-        const usr = data.data[0];
-        savedName = `${usr.displayName} (@${username})`;
-        const avatarUrl = (await fetch(`https://thumbnails.roproxy.com/v1/users/avatar-headshot?userIds=${usr.id}&size=150x150&format=Png&isCircular=false`)).json().then(j=>j.data[0].imageUrl);
-        document.getElementById('displayName').innerText = savedName;
-        document.getElementById('avatarImg').src = await avatarUrl;
-        document.getElementById('avatarSection').style.display = 'block';
-      } catch {
-        alert("⚠️ Error loading data.");
-      } finally {
-        document.getElementById('loadingSpinner').style.display='none';
-      }
-    },2000);
+    if(!username) return alert('Vui lòng nhập username.');
+    showLoading(true);
+    // hide avatar while loading
+    document.getElementById('avatarWrap').style.display = 'none';
+    try{
+      const res = await fetch('https://users.roproxy.com/v1/usernames/users', {
+        method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({usernames:[username]})
+      });
+      const j = await res.json();
+      if(!j.data || !j.data.length){ showLoading(false); return alert('Không tìm thấy username.'); }
+      const user = j.data[0];
+      // fetch avatar
+      const aRes = await fetch(`https://thumbnails.roproxy.com/v1/users/avatar-headshot?userIds=${user.id}&size=150x150&format=Png&isCircular=false`);
+      const aJ = await aRes.json();
+      const avatarUrl = aJ?.data?.[0]?.imageUrl || '';
+
+      state.username = username;
+      state.displayName = user.displayName || username;
+      state.avatar = avatarUrl;
+
+      // set UI
+      document.getElementById('avatarImg').src = state.avatar;
+      document.getElementById('displayName').innerText = `${state.displayName} (@${state.username})`;
+      document.getElementById('avatarWrap').style.display = 'block';
+    }catch(err){
+      console.error(err);
+      alert('Lỗi khi tải dữ liệu. Thử lại sau.');
+    }finally{
+      showLoading(false);
+    }
   }
 
-  function selectAmount(amount) {
-    selectedAmount = amount;
-    document.querySelectorAll('.robux-options button').forEach(b=>b.classList.remove('selected'));
-    event.currentTarget.classList.add('selected');
-    document.getElementById('confirmBtn').style.display='inline-block';
+  function setRobux(amount, btn){
+    document.getElementById('robuxInput').value = amount;
+    document.querySelectorAll('.rob-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
   }
 
-  function confirmOrder() {
-    if (!selectedAmount) return alert("Please select a Robux amount");
-    document.getElementById('loadingSpinner').style.display='block';
-    setTimeout(()=>{
-      document.getElementById('loadingSpinner').style.display='none';
-      document.getElementById('successPopup').style.display='block';
-    },2000);
+  async function onConfirm(){
+    const amountRaw = document.getElementById('robuxInput').value;
+    if(!amountRaw || isNaN(amountRaw) || Number(amountRaw) <= 0) return alert('Nhập số Robux hợp lệ.');
+    state.amount = Number(amountRaw);
+    state.robloxType = document.querySelector('input[name="robloxType"]:checked').value || 'Roblox';
+
+    // show loading spinner, then popup
+    showLoading(true);
+    await new Promise(r => setTimeout(r, 1400)); // simulate delay
+    showLoading(false);
+
+    // fill popup content
+    document.getElementById('popupName').innerText = `${state.displayName} (@${state.username})`;
+    document.getElementById('popupVersion').innerText = state.robloxType;
+    document.getElementById('popupAmount').innerText = `${state.amount.toLocaleString('en-US')} Robux`;
+    document.getElementById('popupDate').innerText = new Date().toLocaleString('vi-VN', { timeZone:'Asia/Ho_Chi_Minh' });
+
+    showOverlay(true);
   }
 
-  function showOrderInfo() {
-    document.getElementById('successPopup').style.display='none';
-    const vnTime = new Date().toLocaleString("vi-VN", {timeZone: "Asia/Ho_Chi_Minh"});
-    document.getElementById('orderInfo').innerHTML = `
-      <div>Đã done cho: ${savedName}</div>
-      <div>Hình thức: VND</div>
-      <div>Bản Roblox: Roblox</div>
-      <div>Số lượng: ${selectedAmount} Robux</div>
-      <div>Tình trạng đơn: <span class="status-success">Thành công</span></div>
-      <div>Tình trạng done: <span class="status-pending">Chờ duyệt (1h - 72h)</span></div>
-      <div>Ngày tạo: ${vnTime}</div>
-    `;
-    document.getElementById('orderInfo').style.display='block';
+  function goToResult(){
+    showOverlay(false);
+    // animate hide main card
+    const main = document.getElementById('mainCard');
+    main.classList.add('fadeOut');
+    setTimeout(()=>{ main.style.display='none'; showResult(); }, 420);
+  }
+
+  function showResult(){
+    document.getElementById('resultAvatar').src = state.avatar;
+    document.getElementById('resultName').innerText = `${state.displayName} (@${state.username})`;
+    document.getElementById('r_donefor').innerText = `${state.displayName} (@${state.username})`;
+    document.getElementById('r_version').innerText = state.robloxType;
+    document.getElementById('r_amount').innerText = `${state.amount.toLocaleString('en-US')} Robux`;
+    document.getElementById('r_date').innerText = new Date().toLocaleString('vi-VN', { timeZone:'Asia/Ho_Chi_Minh' });
+
+    document.getElementById('resultPage').style.display = 'block';
+    document.getElementById('resultPage').classList.add('fadeIn');
+    window.scrollTo({ top:0, behavior:'smooth' });
+  }
+
+  function goBack(){
+    // show main again
+    document.getElementById('resultPage').style.display = 'none';
+    const main = document.getElementById('mainCard');
+    main.style.display = 'block';
+    main.classList.remove('fadeOut');
+    window.scrollTo({ top:0, behavior:'smooth' });
   }
 </script>
 </body>
