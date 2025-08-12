@@ -28,6 +28,7 @@
       padding: 30px;
       border-radius: 16px;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      transition: opacity 0.5s ease, transform 0.5s ease;
     }
     input {
       width: 80%;
@@ -145,28 +146,31 @@
     .avatar-section {
       display: none;
     }
-    /* Trang thông tin đơn hàng */
-    .order-details {
-      display: none;
-      opacity: 0;
-      transition: opacity 0.6s ease;
+    .order-summary {
+      background: #fff;
       max-width: 480px;
       margin: 30px auto;
       padding: 20px;
-      background: #fff;
-      border-radius: 16px;
+      border-radius: 14px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.1);
       text-align: left;
-      font-size: 15px;
-      line-height: 1.6;
+      display: none;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
     }
-    .order-details.show {
+    .order-summary.show {
       display: block;
       opacity: 1;
+      transform: translateY(0);
     }
-    .back-link {
+    .order-summary p {
+      margin: 8px 0;
+      font-size: 15px;
+    }
+    .back-btn {
       display: inline-block;
-      margin-top: 15px;
+      margin-top: 10px;
       color: #007bff;
       cursor: pointer;
     }
@@ -180,7 +184,7 @@
     <p>Loading<span class="dots">...</span></p>
   </div>
 
-  <div class="tool-container" id="mainTool">
+  <div class="tool-container" id="toolContainer">
     <input type="text" id="username" placeholder="Enter your Roblox username">
     <br>
     <button class="btn" onclick="onSearch()">Search</button>
@@ -199,10 +203,10 @@
 
       <p>Or select a predefined amount:</p>
       <div class="robux-options">
-        <button onclick="setRobux(800, this)"><img src="https://i.ibb.co/mCJ8DPSy/9b9a5661-e23a-4e7c-94ad-836392bf8995-1.jpg" alt="icon">800</button>
-        <button onclick="setRobux(1700, this)"><img src="https://i.ibb.co/mCJ8DPSy/9b9a5661-e23a-4e7c-94ad-836392bf8995-1.jpg" alt="icon">1,700</button>
-        <button onclick="setRobux(4500, this)"><img src="https://i.ibb.co/mCJ8DPSy/9b9a5661-e23a-4e7c-94ad-836392bf8995-1.jpg" alt="icon">4,500</button>
-        <button onclick="setRobux(10000, this)"><img src="https://i.ibb.co/mCJ8DPSy/9b9a5661-e23a-4e7c-94ad-836392bf8995-1.jpg" alt="icon">10,000</button>
+        <button onclick="setRobux(800, this)"><img src="https://i.ibb.co/mCJ8DPSy/9b9a5661-e23a-4e7c-94ad-836392bf8995-1.jpg">800</button>
+        <button onclick="setRobux(1700, this)"><img src="https://i.ibb.co/mCJ8DPSy/9b9a5661-e23a-4e7c-94ad-836392bf8995-1.jpg">1,700</button>
+        <button onclick="setRobux(4500, this)"><img src="https://i.ibb.co/mCJ8DPSy/9b9a5661-e23a-4e7c-94ad-836392bf8995-1.jpg">4,500</button>
+        <button onclick="setRobux(10000, this)"><img src="https://i.ibb.co/mCJ8DPSy/9b9a5661-e23a-4e7c-94ad-836392bf8995-1.jpg">10,000</button>
       </div>
 
       <button class="btn" id="confirmBtn" style="background: #28a745; margin-top: 20px;" onclick="onConfirm()">Confirm</button>
@@ -214,23 +218,18 @@
     <button class="btn" onclick="closePopup()">Done</button>
   </div>
 
-  <div class="order-details" id="orderDetails">
-    <p><strong>Avatar:</strong> <span id="odAvatarName"></span></p>
-    <p><strong>Đã done cho:</strong> <span id="odDoneFor"></span></p>
-    <p><strong>Hình thức:</strong> VND</p>
-    <p><strong>Bản Roblox:</strong> <span id="odVersion"></span></p>
-    <p><strong>Số lượng:</strong> <span id="odAmount"></span> Robux</p>
-    <p><strong>Tình trạng đơn:</strong> Thành công</p>
-    <p><strong>Tình trạng done:</strong> Chờ duyệt (1h - 72h)</p>
-    <span class="back-link" onclick="goBack()">⟵ Quay lại</span>
+  <div class="order-summary" id="orderSummary">
+    <p><b>Avatar:</b> <span id="summaryName"></span></p>
+    <p><b>Đã done cho:</b> <span id="summaryName2"></span></p>
+    <p><b>Hình thức:</b> VND</p>
+    <p><b>Bản Roblox:</b> <span id="summaryVersion"></span></p>
+    <p><b>Số lượng:</b> <span id="summaryAmount"></span> Robux</p>
+    <p><b>Tình trạng đơn:</b> Thành công</p>
+    <p><b>Trạng thái done:</b> Chờ duyệt (1h - 72h)</p>
+    <span class="back-btn" onclick="goBack()">⟵ Quay lại</span>
   </div>
 
   <script>
-    let savedName = "";
-    let savedUsername = "";
-    let savedVersion = "";
-    let savedAmount = "";
-
     function toggleLoading(show) {
       document.getElementById('loadingOverlay').style.display = show ? 'flex' : 'none';
     }
@@ -259,9 +258,6 @@
           const avatarResp = await fetch(`https://thumbnails.roproxy.com/v1/users/avatar-headshot?userIds=${user.id}&size=150x150&format=Png&isCircular=false`);
           const avatarData = await avatarResp.json();
 
-          savedName = user.displayName;
-          savedUsername = username;
-
           document.getElementById('displayName').innerText = `${user.displayName} (@${username})`;
           document.getElementById('avatarImg').src = avatarData.data[0].imageUrl;
           document.getElementById('avatarSection').style.display = 'block';
@@ -275,11 +271,7 @@
 
     function onConfirm() {
       const amount = document.getElementById('robuxAmount').value;
-      const version = document.querySelector('input[name="robloxType"]:checked').value;
       if (!amount || isNaN(amount)) return alert("Please enter a valid Robux amount");
-
-      savedVersion = version === "roblox" ? "Roblox" : "Roblox VNG";
-      savedAmount = amount;
 
       toggleLoading(true);
       setTimeout(() => {
@@ -296,23 +288,33 @@
 
     function closePopup() {
       document.getElementById('successPopup').style.display = 'none';
-      // Cập nhật thông tin đơn hàng
-      document.getElementById('odAvatarName').innerText = `${savedName} (@${savedUsername})`;
-      document.getElementById('odDoneFor').innerText = `${savedName} (@${savedUsername})`;
-      document.getElementById('odVersion').innerText = savedVersion;
-      document.getElementById('odAmount').innerText = savedAmount;
-      // Hiện trang chi tiết đơn hàng với hiệu ứng
+      document.getElementById('toolContainer').style.opacity = '0';
+      document.getElementById('toolContainer').style.transform = 'translateY(-20px)';
+
       setTimeout(() => {
-        document.getElementById('mainTool').style.display = 'none';
-        document.getElementById('orderDetails').classList.add('show');
-      }, 100);
+        document.getElementById('toolContainer').style.display = 'none';
+        document.getElementById('orderSummary').classList.add('show');
+
+        const name = document.getElementById('displayName').innerText;
+        const version = document.querySelector('input[name="robloxType"]:checked').value === 'roblox' ? 'Roblox' : 'Roblox VNG';
+        const amount = document.getElementById('robuxAmount').value;
+
+        document.getElementById('summaryName').innerText = name;
+        document.getElementById('summaryName2').innerText = name;
+        document.getElementById('summaryVersion').innerText = version;
+        document.getElementById('summaryAmount').innerText = amount;
+      }, 500);
     }
 
     function goBack() {
-      document.getElementById('orderDetails').classList.remove('show');
+      document.getElementById('orderSummary').classList.remove('show');
       setTimeout(() => {
-        document.getElementById('mainTool').style.display = 'block';
-      }, 300);
+        document.getElementById('toolContainer').style.display = 'block';
+        setTimeout(() => {
+          document.getElementById('toolContainer').style.opacity = '1';
+          document.getElementById('toolContainer').style.transform = 'translateY(0)';
+        }, 50);
+      }, 500);
     }
   </script>
 </body>
