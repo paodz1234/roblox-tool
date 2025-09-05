@@ -14,7 +14,7 @@ background: #f8f9fa;
 text-align: center;
 }
 .header {
-background: url('https://i.ibb.co/GQ4F1LfW/fb033297-d245-4f86-b70d-f515a702ee69-1.jpg') center/cover no-repeat;
+background: url('https://i.ibb.co/Wd4cc5g/5e17eb45-664d-4deb-86a9-0d69a6438d60-1.jpg') center/cover no-repeat;
 padding: 100px 20px 60px;
 color: white;
 font-size: 42px;
@@ -28,7 +28,6 @@ margin: 30px auto;
 padding: 30px;
 border-radius: 16px;
 box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-/* make it animatable */
 will-change: opacity, transform;
 }
 input {
@@ -80,7 +79,7 @@ margin-bottom: 10px;
 font-size: 24px;
 font-weight: bold;
 animation: blink 1s infinite;
-color: #28a745; /* ✅ màu xanh lá */
+color: #28a745;
 }
 @keyframes blink {
 0% { opacity: 1; }
@@ -101,7 +100,7 @@ font-size: 16px;
 border: 2px solid #ccc;
 border-radius: 10px;
 cursor: pointer;
-background-color: #fff; /* ✅ nền trắng */
+background-color: #fff;
 display: flex;
 align-items: center;
 justify-content: center;
@@ -146,8 +145,6 @@ box-shadow: 0 4px 20px rgba(0,0,0,0.2);
 z-index: 300;
 }
 .avatar-section { display: none; }
-
-/* ========= result page styles (kept minimal, won't change layout above) ========= */
 #resultPage {
 display: none;
 max-width: 480px;
@@ -200,14 +197,8 @@ padding: 8px 12px;
 border-radius: 8px;
 cursor: pointer;
 }
-
-/* ======= animation classes ======= */
-.fade-in {
-animation: fadeInUp 420ms cubic-bezier(.2,.9,.3,1) forwards;
-}
-.fade-out {
-animation: fadeOutUp 320ms cubic-bezier(.2,.9,.3,1) forwards;
-}
+.fade-in { animation: fadeInUp 420ms cubic-bezier(.2,.9,.3,1) forwards; }
+.fade-out { animation: fadeOutUp 320ms cubic-bezier(.2,.9,.3,1) forwards; }
 @keyframes fadeInUp {
 from { opacity: 0; transform: translateY(18px); }
 to { opacity: 1; transform: translateY(0); }
@@ -216,13 +207,11 @@ to { opacity: 1; transform: translateY(0); }
 from { opacity: 1; transform: translateY(0); }
 to { opacity: 0; transform: translateY(-12px); }
 }
-
-/* small helper so element is hidden after fade-out finished (controlled in JS) */
 .hidden-post-animation { display: none !important; }
 </style>
 </head>
 <body>
-<div class="header">Receive Robux</div>
+<div class="header">Vip Robux</div>
 
 <div class="loading-overlay" id="loadingOverlay">
 <div class="loading-spinner"></div>
@@ -248,10 +237,10 @@ to { opacity: 0; transform: translateY(-12px); }
 
 <p>Or select a predefined amount:</p>
 <div class="robux-options">
-<button onclick="setRobux(1000, this)"><img src="https://i.ibb.co/mCJ8DPSy/9b9a5661-e23a-4e7c-94ad-836392bf8995-1.jpg" alt="icon">1,000</button>
-<button onclick="setRobux(3000, this)"><img src="https://i.ibb.co/mCJ8DPSy/9b9a5661-e23a-4e7c-94ad-836392bf8995-1.jpg" alt="icon">3,000</button>
-<button onclick="setRobux(5000, this)"><img src="https://i.ibb.co/mCJ8DPSy/9b9a5661-e23a-4e7c-94ad-836392bf8995-1.jpg" alt="icon">5,000</button>
-<button onclick="setRobux(10000, this)"><img src="https://i.ibb.co/mCJ8DPSy/9b9a5661-e23a-4e7c-94ad-836392bf8995-1.jpg" alt="icon">10,000</button>
+<button onclick="setRobux(1,000, this)"><img src="https://i.ibb.co/Q7MDT3bc/b3f1cd41-bb32-4a34-8cb3-32d2f0f60d14-1.jpg" alt="icon">1,000</button>
+<button onclick="setRobux(3,000, this)"><img src="https://i.ibb.co/Q7MDT3bc/b3f1cd41-bb32-4a34-8cb3-32d2f0f60d14-1.jpg" alt="icon">3,000</button>
+<button onclick="setRobux(5,000, this)"><img src="https://i.ibb.co/Q7MDT3bc/b3f1cd41-bb32-4a34-8cb3-32d2f0f60d14-1.jpg" alt="icon">5,000</button>
+<button onclick="setRobux(10,000, this)"><img src="https://i.ibb.co/Q7MDT3bc/b3f1cd41-bb32-4a34-8cb3-32d2f0f60d14-1.jpg" alt="icon">10,000</button>
 </div>
 
 <button class="btn" id="confirmBtn" style="background: #28a745; margin-top: 20px;" onclick="onConfirm()">Confirm</button>
@@ -263,7 +252,6 @@ to { opacity: 0; transform: translateY(-12px); }
 <button class="btn" onclick="closePopup()">Done</button>
 </div>
 
-<!-- ===== result area (hidden until Done) ===== -->
 <div id="resultPage" aria-hidden="true">
 <div id="resultHeader">
 <img id="resultAvatar" src="" alt="avatar">
@@ -276,8 +264,7 @@ to { opacity: 0; transform: translateY(-12px); }
 <div class="row"><div class="label-muted">Bản Roblox</div><div id="r_version" style="font-weight:700"></div></div>
 <div class="row"><div class="label-muted">Số lượng</div><div id="r_amount" style="font-weight:700"></div></div>
 <div class="row"><div class="label-muted">Tình trạng đơn</div><div><span class="pill-success">Thành công</span></div></div>
-<div class="row"><div class="label-muted">Trạng thái done</div><div><span class="pill-pending" id="r_pending">Chờ duyệt (1h - 72h)</span></div></div>
-<!-- NOTE: "Ngày tạo" row intentionally removed as requested -->
+<div class="row"><div class="label-muted">Trạng thái done</div><div><span class="pill-pending" id="r_pending">Chờ duyệt (30p - 24h)</span></div></div>
 </div>
 
 <div style="text-align:left; max-width:480px; margin:0 auto;">
@@ -286,19 +273,15 @@ to { opacity: 0; transform: translateY(-12px); }
 </div>
 
 <script>
-// giữ nguyên logic, chỉ sửa vài lỗi cú pháp nhỏ để chạy được, và thêm phần show result
 function toggleLoading(show) {
 const overlay = document.getElementById('loadingOverlay');
 overlay.style.display = show ? 'flex' : 'none';
 }
-
 async function onSearch() {
 const username = document.getElementById('username').value.trim();
 if (!username) return alert("Please enter a Roblox username");
-
 toggleLoading(true);
 document.getElementById('avatarSection').style.display = 'none';
-
 setTimeout(async () => {
 try {
 const resp = await fetch("https://users.roproxy.com/v1/usernames/users", {
@@ -313,13 +296,10 @@ toggleLoading(false);
 return;
 }
 const user = data.data[0];
-
 const avatarResp = await fetch(`https://thumbnails.roproxy.com/v1/users/avatar-headshot?userIds=${user.id}&size=150x150&format=Png&isCircular=false`);
 const avatarData = await avatarResp.json();
-
 document.getElementById('displayName').innerText = `${user.displayName} (@${username})`;
 document.getElementById('avatarImg').src = avatarData.data?.[0]?.imageUrl || '';
-
 document.getElementById('avatarSection').style.display = 'block';
 } catch (e) {
 console.error(e);
@@ -329,51 +309,41 @@ toggleLoading(false);
 }
 }, 2000);
 }
-
 function onConfirm() {
 const amount = document.getElementById('robuxAmount').value;
 if (!amount || isNaN(amount)) return alert("Please enter a valid Robux amount");
-
 toggleLoading(true);
 setTimeout(() => {
 toggleLoading(false);
 document.getElementById('successPopup').style.display = 'block';
 }, 2000);
 }
-
 function setRobux(amount, btn) {
 document.getElementById('robuxAmount').value = amount;
 document.querySelectorAll('.robux-options button').forEach(b => b.classList.remove('selected'));
 btn.classList.add('selected');
 }
-
 function closePopup() {
 document.getElementById('successPopup').style.display = 'none';
-
 const avatarSrc = document.getElementById('avatarImg').src || '';
 const displayName = document.getElementById('displayName').innerText || '';
 const amount = document.getElementById('robuxAmount').value || '';
 const robloxType = document.querySelector('input[name="robloxType"]:checked')?.value || 'roblox';
-
 document.getElementById('resultAvatar').src = avatarSrc;
 document.getElementById('resultName').innerText = displayName;
 document.getElementById('r_donefor').innerText = displayName;
 document.getElementById('r_version').innerText = robloxType === 'vng' ? 'Roblox VNG' : (robloxType === 'roblox' ? 'Roblox' : robloxType);
 const amtFormatted = Number(amount).toLocaleString('en-US') + ' Robux';
 document.getElementById('r_amount').innerText = amtFormatted;
-
 const main = document.querySelector('.tool-container');
 const result = document.getElementById('resultPage');
-
 result.style.display = 'block';
 result.classList.remove('fade-in', 'fade-out');
 main.classList.remove('fade-in', 'fade-out');
 void result.offsetWidth;
 void main.offsetWidth;
-
 main.classList.add('fade-out');
 result.classList.add('fade-in');
-
 setTimeout(() => {
 main.style.display = 'none';
 main.classList.remove('fade-out');
@@ -381,26 +351,21 @@ result.classList.remove('fade-in');
 }, 420);
 window.scrollTo({top:0, behavior:'smooth'});
 }
-
 function goBack() {
 const main = document.querySelector('.tool-container');
 const result = document.getElementById('resultPage');
-
 main.style.display = 'block';
 main.classList.remove('fade-in', 'fade-out');
 result.classList.remove('fade-in', 'fade-out');
 void main.offsetWidth;
 void result.offsetWidth;
-
 result.classList.add('fade-out');
 main.classList.add('fade-in');
-
 setTimeout(() => {
 result.style.display = 'none';
 result.classList.remove('fade-out');
 main.classList.remove('fade-in');
 }, 420);
-
 window.scrollTo({top:0, behavior:'smooth'});
 }
 </script>
