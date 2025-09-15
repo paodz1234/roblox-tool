@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Vip Robux</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<style>
+body {
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #f8f9fa;
+  text-align: center;
+}
+.header {
+  background: url('https://i.ibb.co/Wd4cc5g/5e17eb45-664d-4deb-86a9-0d69a6438d60-1.jpg') center/cover no-repeat;
+  padding: 100px 20px 60px;
+  color: white;
+  font-size: 42px;
+  font-weight: bold;
+  text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+}
+.tool-container {
+  background: #fff;
+  max-width: 480px;
+  margin: 30px auto;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+input {
+  width: 80%;
+  padding: 12px;
+  font-size: 16px;
+  margin-bottom: 16px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-family: 'Poppins', sans-serif;
+}
+.btn {
+  padding: 10px 22px;
+  background: black;
+  color: white;
+  font-size: 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  border: none;
+  font-family: 'Poppins', sans-serif;
+}
+.loading-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255,255,255,0.85);
+  z-index: 200;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.loading-spinner {
+  border: 8px solid #f3f3f3;
+  border-top: 8px solid #28a745;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 1s linear infinite;
+  margin-bottom: 10px;
+}
+@keyframes spin {
+0% { transform: rotate(0deg); }
+100% { transform: rotate(360deg); }
+}
+.loading-overlay p {
+  font-size: 24px;
+  font-weight: bold;
+  animation: blink 1s infinite;
+  color: #28a745;
+}
+@keyframes blink {
+0% { opacity: 1; }
+50% { opacity: 0.3; }
+100% { opacity: 1; }
+}
+.robux-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  justify-items: center;
+  margin-top: 10px;
+}
+.robux-options button {
+  padding: 12px;
+  width: 100%;
+  font-size: 16px;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  cursor: pointer;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.robux-options button.selected {
+  border-color: #28a745;
+}
+.robux-options button img {
+  width: 20px;
+  height: 20px;
+}
+.robux-input {
+  width: 60%;
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  font-family: 'Poppins', sans-serif;
+}
+.radio-group {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+.radio-group label {
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.success-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 30px;
+  border-radius: 14px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  z-index: 300;
+}
+.avatar-section { display: none; }
+.avatar-section img {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: top;
+  margin: 20px 0;
+}
+#resultPage {
+  display: none;
+  max-width: 480px;
+  margin: 24px auto;
+  background: #fff;
+  border-radius: 12px;
+  padding: 18px;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.08);
+  text-align: left;
+}
+#resultHeader { text-align:center; margin-bottom:8px; }
+#resultHeader img {
+  width: 140px;
+  height: 140px;
+  border-radius:50%;
+  object-fit: cover;
+  object-position: top;
+  display:block;
+  margin: 0 auto 8px;
+}
+.order-box {
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #fff;
+}
+.order-box .row {
+  padding: 10px 12px;
+  border-bottom: 1px solid #eee;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-size:15px;
+}
+.order-box .row:last-child { border-bottom: none; }
+.label-muted { color:#666; }
+.pill-success {
+  background: #28a745;
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-weight:700;
+}
+.pill-pending {
+  background: #ff9800;
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-weight:700;
+}
+.back-btn {
+  margin-top: 14px;
+  background: #f1f1f1;
+  color: #222;
+  border: 1px solid #ddd;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.fade-in { animation: fadeInUp 420ms cubic-bezier(.2,.9,.3,1) forwards; }
+.fade-out { animation: fadeOutUp 320ms cubic-bezier(.2,.9,.3,1) forwards; }
+@keyframes fadeInUp {
+from { opacity: 0; transform: translateY(18px); }
+to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeOutUp {
+from { opacity: 1; transform: translateY(0); }
+to { opacity: 0; transform: translateY(-12px); }
+}
+.hidden-post-animation { display: none !important; }
+</style>
+</head>
+<body>
+<div class="header">Vip Robux</div>
+
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loading-spinner"></div>
+  <p>Loading<span class="dots">...</span></p>
+</div>
+
+<div class="tool-container" id="mainContainer">
+  <p>Enter Display Name</p>
+  <input type="text" id="displayNameInput" placeholder="Enter display name"><br>
+
+  <p>Enter ID (@username)</p>
+  <input type="text" id="idInput" placeholder="Enter ID"><br>
+
+  <button class="btn" onclick="onSearch()">Search</button>
+
+  <div class="avatar-section" id="avatarSection">
+    <img id="avatarImg" src="https://i.ibb.co/fzyLpGQ3/042aaeee-f386-4d7b-8072-56df4e011c85.jpg" alt="Avatar">
+    <div id="displayName" style="font-size: 20px; font-weight: bold;"></div>
+
+    <p>Enter Robux amount</p>
+    <div class="radio-group">
+      <label><input type="radio" name="robloxType" value="roblox" checked> Roblox</label>
+      <label><input type="radio" name="robloxType" value="vng"> Roblox VNG</label>
+    </div>
+
+    <input class="robux-input" type="number" id="robuxAmount" placeholder="Enter Robux"/>
+
+    <p>Or select a predefined amount:</p>
+    <div class="robux-options">
+      <button onclick="setRobux(1000, this)">1,000</button>
+      <button onclick="setRobux(3000, this)">3,000</button>
+      <button onclick="setRobux(5000, this)">5,000</button>
+      <button onclick="setRobux(10000, this)">10,000</button>
+    </div>
+
+    <button class="btn" id="confirmBtn" style="background: #28a745; margin-top: 20px;" onclick="onConfirm()">Confirm</button>
+  </div>
+</div>
+
+<div class="success-popup" id="successPopup" style="display:none">
+  <p style="font-size: 18px; font-weight: bold;">✅ Success!<br>Your order has been created.</p>
+  <button class="btn" onclick="closePopup()">Done</button>
+</div>
+
+<div id="resultPage" aria-hidden="true">
+  <div id="resultHeader">
+    <img id="resultAvatar" src="" alt="avatar">
+    <div id="resultName" style="font-weight:700; text-align:center; margin-bottom:8px;"></div>
+  </div>
+
+  <div class="order-box" style="max-width:480px; margin: 0 auto 8px;">
+    <div class="row"><div class="label-muted">Đã done cho</div><div id="r_donefor" style="font-weight:700"></div></div>
+    <div class="row"><div class="label-muted">Hình thức</div><div>VND</div></div>
+    <div class="row"><div class="label-muted">Bản Roblox</div><div id="r_version" style="font-weight:700"></div></div>
+    <div class="row"><div class="label-muted">Số lượng</div><div id="r_amount" style="font-weight:700"></div></div>
+    <div class="row"><div class="label-muted">Tình trạng đơn</div><div><span class="pill-success">Thành công</span></div></div>
+    <div class="row"><div class="label-muted">Trạng thái done</div><div><span class="pill-pending" id="r_pending">Chờ duyệt (30p - 24h)</span></div></div>
+  </div>
+
+  <div style="text-align:left; max-width:480px; margin:0 auto;">
+    <button class="back-btn" onclick="goBack()">⟵ Quay lại</button>
+  </div>
+</div>
+
+<script>
+function toggleLoading(show) {
+  document.getElementById('loadingOverlay').style.display = show ? 'flex' : 'none';
+}
+
+function onSearch() {
+  const displayName = document.getElementById('displayNameInput').value.trim();
+  const idName = document.getElementById('idInput').value.trim();
+  if(!displayName || !idName) return alert("Please enter both Display Name and ID");
+  toggleLoading(true);
+  setTimeout(() => {
+    document.getElementById('displayName').innerText = `${displayName} (@${idName})`;
+    document.getElementById('avatarImg').src = "https://i.ibb.co/fzyLpGQ3/042aaeee-f386-4d7b-8072-56df4e011c85.jpg";
+    document.getElementById('avatarSection').style.display = 'block';
+    
+    // Ẩn input và nút search
+    document.getElementById('displayNameInput').style.display = 'none';
+    document.getElementById('idInput').style.display = 'none';
+    document.querySelector('.tool-container button').style.display = 'none';
+    
+    toggleLoading(false);
+  }, 1000);
+}
+
+function onConfirm() {
+  const amount = document.getElementById('robuxAmount').value;
+  if (!amount || isNaN(amount)) return alert("Please enter a valid Robux amount");
+  toggleLoading(true);
+  setTimeout(() => {
+    toggleLoading(false);
+    document.getElementById('successPopup').style.display = 'block';
+  }, 1000);
+}
+
+function setRobux(amount, btn) {
+  document.getElementById('robuxAmount').value = amount;
+  document.querySelectorAll('.robux-options button').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+}
+
+function closePopup() {
+  document.getElementById('successPopup').style.display = 'none';
+  const avatarSrc = document.getElementById('avatarImg').src;
+  const displayName = document.getElementById('displayName').innerText;
+  const amount = document.getElementById('robuxAmount').value;
+  const robloxType = document.querySelector('input[name="robloxType"]:checked')?.value || 'roblox';
+
+  document.getElementById('resultAvatar').src = avatarSrc;
+  document.getElementById('resultName').innerText = displayName;
+  document.getElementById('r_donefor').innerText = displayName;
+  document.getElementById('r_version').innerText = robloxType === 'vng' ? 'Roblox VNG' : (robloxType === 'roblox' ? 'Roblox' : robloxType);
+  document.getElementById('r_amount').innerText = Number(amount).toLocaleString('en-US') + ' Robux';
+
+  const main = document.querySelector('.tool-container');
+  const result = document.getElementById('resultPage');
+  result.style.display = 'block';
+  result.classList.remove('fade-in', 'fade-out');
+  main.classList.remove('fade-in', 'fade-out');
+  void result.offsetWidth;
+  void main.offsetWidth;
+  main.classList.add('fade-out');
+  result.classList.add('fade-in');
+  setTimeout(() => {
+    main.style.display = 'none';
+    main.classList.remove('fade-out');
+    result.classList.remove('fade-in');
+  }, 420);
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function goBack() {
+  const main = document.querySelector('.tool-container');
+  const result = document.getElementById('resultPage');
+  main.style.display = 'block';
+  main.classList.remove('fade-in', 'fade-out');
+  result.classList.remove('fade-in', 'fade-out');
+  void main.offsetWidth;
+  void result.offsetWidth;
+  result.classList.add('fade-out');
+  main.classList.add('fade-in');
+  setTimeout(() => {
+    result.style.display = 'none';
+    result.classList.remove('fade-out');
+    main.classList.remove('fade-in');
+  }, 420);
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+</script>
+</body>
+</html>
