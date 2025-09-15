@@ -127,27 +127,17 @@ input {
   z-index: 300;
 }
 .avatar-section { display: none; }
-.avatar-section img {
-  width: 160px;
-  height: 160px;
+.avatar-section img,
+#resultHeader img {
+  width: 200px;
+  height: 200px;
   border-radius: 50%;
-  object-fit: cover;
-  object-position: top;
-  margin: 20px 0;
-  border: 3px solid #28a745;
+  object-fit: cover;       /* chỉ hiển thị phần đầu */
+  object-position: top;    /* căn phần đầu lên trên */
+  margin: 20px auto;
 }
 #resultPage { display: none; max-width: 480px; margin: 24px auto; background: #fff; border-radius: 12px; padding: 18px; box-shadow: 0 6px 24px rgba(0,0,0,0.08); text-align: left; }
 #resultHeader { text-align:center; margin-bottom:8px; }
-#resultHeader img {
-  width: 160px;
-  height: 160px;
-  border-radius:50%;
-  object-fit: cover;
-  object-position: top;
-  display:block;
-  margin: 0 auto 8px;
-  border: 3px solid #28a745;
-}
 .order-box {
   border: 2px solid #e0e0e0;
   border-radius: 10px;
@@ -171,7 +161,6 @@ input {
 .fade-out { animation: fadeOutUp 320ms cubic-bezier(.2,.9,.3,1) forwards; }
 @keyframes fadeInUp {from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); }}
 @keyframes fadeOutUp {from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-12px); }}
-.hidden-post-animation { display: none !important; }
 </style>
 </head>
 <body>
