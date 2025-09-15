@@ -129,11 +129,11 @@ input {
 .avatar-section { display: none; }
 .avatar-section img,
 #resultHeader img {
-  width: 200px;
-  height: 200px;
+  width: 160px;
+  height: 160px;
   border-radius: 50%;
-  object-fit: cover;       /* chỉ hiển thị phần đầu */
-  object-position: top;    /* căn phần đầu lên trên */
+  object-fit: cover;       
+  object-position: top 20%; 
   margin: 20px auto;
 }
 #resultPage { display: none; max-width: 480px; margin: 24px auto; background: #fff; border-radius: 12px; padding: 18px; box-shadow: 0 6px 24px rgba(0,0,0,0.08); text-align: left; }
@@ -172,13 +172,15 @@ input {
 </div>
 
 <div class="tool-container" id="mainContainer">
-  <p>Enter Display Name</p>
-  <input type="text" id="displayNameInput" placeholder="Enter display name"><br>
+  <div id="inputSection">
+    <p>Enter Display Name</p>
+    <input type="text" id="displayNameInput" placeholder="Enter display name"><br>
 
-  <p>Enter ID (@username)</p>
-  <input type="text" id="idInput" placeholder="Enter ID"><br>
+    <p>Enter ID (@username)</p>
+    <input type="text" id="idInput" placeholder="Enter ID"><br>
 
-  <button class="btn" id="searchBtn" onclick="onSearch()">Search</button>
+    <button class="btn" id="searchBtn" onclick="onSearch()">Search</button>
+  </div>
 
   <div class="avatar-section" id="avatarSection">
     <img id="avatarImg" src="https://i.ibb.co/fzyLpGQ3/042aaeee-f386-4d7b-8072-56df4e011c85.jpg" alt="Avatar">
@@ -194,10 +196,10 @@ input {
 
     <p>Or select a predefined amount:</p>
     <div class="robux-options">
-      <button onclick="setRobux(1000, this)"><img src="https://i.ibb.co/7N1k3Qq/robux.png" alt="robux">1,000</button>
-      <button onclick="setRobux(3000, this)"><img src="https://i.ibb.co/7N1k3Qq/robux.png" alt="robux">3,000</button>
-      <button onclick="setRobux(5000, this)"><img src="https://i.ibb.co/7N1k3Qq/robux.png" alt="robux">5,000</button>
-      <button onclick="setRobux(10000, this)"><img src="https://i.ibb.co/7N1k3Qq/robux.png" alt="robux">10,000</button>
+      <button onclick="setRobux(1000, this)"><img src="https://i.ibb.co/Q7MDT3bc/b3f1cd41-bb32-4a34-8cb3-32d2f0f60d14-1.jpg" alt="robux">1,000</button>
+      <button onclick="setRobux(3000, this)"><img src="https://i.ibb.co/Q7MDT3bc/b3f1cd41-bb32-4a34-8cb3-32d2f0f60d14-1.jpg" alt="robux">3,000</button>
+      <button onclick="setRobux(5000, this)"><img src="https://i.ibb.co/Q7MDT3bc/b3f1cd41-bb32-4a34-8cb3-32d2f0f60d14-1.jpg" alt="robux">5,000</button>
+      <button onclick="setRobux(10000, this)"><img src="https://i.ibb.co/Q7MDT3bc/b3f1cd41-bb32-4a34-8cb3-32d2f0f60d14-1.jpg" alt="robux">10,000</button>
     </div>
 
     <button class="btn" id="confirmBtn" style="background: #28a745; margin-top: 20px;" onclick="onConfirm()">Confirm</button>
@@ -242,10 +244,8 @@ function onSearch() {
     document.getElementById('avatarImg').src = "https://i.ibb.co/fzyLpGQ3/042aaeee-f386-4d7b-8072-56df4e011c85.jpg";
     document.getElementById('avatarSection').style.display = 'block';
 
-    // Ẩn input và nút search
-    document.getElementById('displayNameInput').style.display = 'none';
-    document.getElementById('idInput').style.display = 'none';
-    document.getElementById('searchBtn').style.display = 'none';
+    // Ẩn hoàn toàn input và nút search
+    document.getElementById('inputSection').style.display = 'none';
     
     toggleLoading(false);
   }, 1000);
