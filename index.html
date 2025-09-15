@@ -28,6 +28,7 @@ body {
   padding: 30px;
   border-radius: 16px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  will-change: opacity, transform;
 }
 input {
   width: 80%;
@@ -104,17 +105,8 @@ input {
   margin-bottom: 20px;
   font-family: 'Poppins', sans-serif;
 }
-.radio-group {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  margin-bottom: 20px;
-}
-.radio-group label {
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-}
+.radio-group { display: flex; justify-content: center; gap: 20px; margin-bottom: 20px; }
+.radio-group label { font-size: 14px; font-weight: 500; cursor: pointer; }
 .success-popup {
   position: fixed;
   top: 50%;
@@ -136,22 +128,20 @@ input {
   object-position: top 20%; 
   margin: 20px auto;
 }
-#resultPage { display: none; max-width: 480px; margin: 24px auto; background: #fff; border-radius: 12px; padding: 18px; box-shadow: 0 6px 24px rgba(0,0,0,0.08); text-align: left; }
-#resultHeader { text-align:center; margin-bottom:8px; }
-.order-box {
-  border: 2px solid #e0e0e0;
-  border-radius: 10px;
-  overflow: hidden;
+#resultPage {
+  display: none;
+  max-width: 480px;
+  margin: 24px auto;
   background: #fff;
+  border-radius: 12px;
+  padding: 18px;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.08);
+  text-align: left;
+  will-change: opacity, transform;
 }
-.order-box .row {
-  padding: 10px 12px;
-  border-bottom: 1px solid #eee;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  font-size:15px;
-}
+#resultHeader { text-align:center; margin-bottom:8px; }
+.order-box { border: 2px solid #e0e0e0; border-radius: 10px; overflow: hidden; background: #fff; }
+.order-box .row { padding: 10px 12px; border-bottom: 1px solid #eee; display:flex; justify-content:space-between; align-items:center; font-size:15px; }
 .order-box .row:last-child { border-bottom: none; }
 .label-muted { color:#666; }
 .pill-success { background: #28a745; color: #fff; padding: 6px 10px; border-radius: 8px; font-weight:700; }
@@ -173,13 +163,9 @@ input {
 
 <div class="tool-container" id="mainContainer">
   <div id="inputSection">
-    <p>Enter Display Name</p>
-    <input type="text" id="displayNameInput" placeholder="Enter display name"><br>
-
-    <p>Enter ID (@username)</p>
-    <input type="text" id="idInput" placeholder="Enter ID"><br>
-
-    <button class="btn" id="searchBtn" onclick="onSearch()">Search</button>
+    <input type="text" id="username" placeholder="Enter your Roblox username">
+    <br>
+    <button class="btn" onclick="onSearch()">Search</button>
   </div>
 
   <div class="avatar-section" id="avatarSection">
@@ -196,10 +182,10 @@ input {
 
     <p>Or select a predefined amount:</p>
     <div class="robux-options">
-      <button onclick="setRobux(1000, this)"><img src="https://i.ibb.co/Q7MDT3bc/b3f1cd41-bb32-4a34-8cb3-32d2f0f60d14-1.jpg" alt="robux">1,000</button>
-      <button onclick="setRobux(3000, this)"><img src="https://i.ibb.co/Q7MDT3bc/b3f1cd41-bb32-4a34-8cb3-32d2f0f60d14-1.jpg" alt="robux">3,000</button>
-      <button onclick="setRobux(5000, this)"><img src="https://i.ibb.co/Q7MDT3bc/b3f1cd41-bb32-4a34-8cb3-32d2f0f60d14-1.jpg" alt="robux">5,000</button>
-      <button onclick="setRobux(10000, this)"><img src="https://i.ibb.co/Q7MDT3bc/b3f1cd41-bb32-4a34-8cb3-32d2f0f60d14-1.jpg" alt="robux">10,000</button>
+      <button onclick="setRobux(1000, this)"><img src="https://i.ibb.co/Q7MDT3bc/b3f1cd41-bb32-4a34-8cb3-32d2f0f60d14-1.jpg" alt="icon">1,000</button>
+      <button onclick="setRobux(3000, this)"><img src="https://i.ibb.co/Q7MDT3bc/b3f1cd41-bb32-4a34-8cb3-32d2f0f60d14-1.jpg" alt="icon">3,000</button>
+      <button onclick="setRobux(5000, this)"><img src="https://i.ibb.co/Q7MDT3bc/b3f1cd41-bb32-4a34-8cb3-32d2f0f60d14-1.jpg" alt="icon">5,000</button>
+      <button onclick="setRobux(10000, this)"><img src="https://i.ibb.co/Q7MDT3bc/b3f1cd41-bb32-4a34-8cb3-32d2f0f60d14-1.jpg" alt="icon">10,000</button>
     </div>
 
     <button class="btn" id="confirmBtn" style="background: #28a745; margin-top: 20px;" onclick="onConfirm()">Confirm</button>
@@ -223,7 +209,7 @@ input {
     <div class="row"><div class="label-muted">Bản Roblox</div><div id="r_version" style="font-weight:700"></div></div>
     <div class="row"><div class="label-muted">Số lượng</div><div id="r_amount" style="font-weight:700"></div></div>
     <div class="row"><div class="label-muted">Tình trạng đơn</div><div><span class="pill-success">Thành công</span></div></div>
-    <div class="row"><div class="label-muted">Trạng thái done</div><div><span class="pill-pending" id="r_pending">Chờ duyệt (30p - 24h)</span></div></div>
+    <div class="row"><div class="label-muted">Trạng thái done</div><div><span class="pill-pending" id="r_pending">Chờ duyệt (1h - 72h)</span></div></div>
   </div>
 
   <div style="text-align:left; max-width:480px; margin:0 auto;">
@@ -232,21 +218,21 @@ input {
 </div>
 
 <script>
-function toggleLoading(show) { document.getElementById('loadingOverlay').style.display = show ? 'flex' : 'none'; }
+function toggleLoading(show) {
+  document.getElementById('loadingOverlay').style.display = show ? 'flex' : 'none';
+}
 
 function onSearch() {
-  const displayName = document.getElementById('displayNameInput').value.trim();
-  const idName = document.getElementById('idInput').value.trim();
-  if(!displayName || !idName) return alert("Please enter both Display Name and ID");
+  const username = document.getElementById('username').value.trim();
+  if (!username) return alert("Please enter a Roblox username");
+
   toggleLoading(true);
   setTimeout(() => {
-    document.getElementById('displayName').innerText = `${displayName} (@${idName})`;
+    document.getElementById('displayName').innerText = username;
     document.getElementById('avatarImg').src = "https://i.ibb.co/fzyLpGQ3/042aaeee-f386-4d7b-8072-56df4e011c85.jpg";
-    document.getElementById('avatarSection').style.display = 'block';
 
-    // Ẩn hoàn toàn input và nút search
-    document.getElementById('inputSection').style.display = 'none';
-    
+    document.getElementById('avatarSection').style.display = 'block';
+    document.getElementById('inputSection').style.display = 'none'; // ẩn hẳn input và nút search
     toggleLoading(false);
   }, 1000);
 }
@@ -269,15 +255,15 @@ function setRobux(amount, btn) {
 
 function closePopup() {
   document.getElementById('successPopup').style.display = 'none';
-  const avatarSrc = document.getElementById('avatarImg').src;
-  const displayName = document.getElementById('displayName').innerText;
-  const amount = document.getElementById('robuxAmount').value;
+  const avatarSrc = document.getElementById('avatarImg').src || '';
+  const displayName = document.getElementById('displayName').innerText || '';
+  const amount = document.getElementById('robuxAmount').value || '';
   const robloxType = document.querySelector('input[name="robloxType"]:checked')?.value || 'roblox';
 
   document.getElementById('resultAvatar').src = avatarSrc;
   document.getElementById('resultName').innerText = displayName;
   document.getElementById('r_donefor').innerText = displayName;
-  document.getElementById('r_version').innerText = robloxType === 'vng' ? 'Roblox VNG' : (robloxType === 'roblox' ? 'Roblox' : robloxType);
+  document.getElementById('r_version').innerText = robloxType === 'vng' ? 'Roblox VNG' : 'Roblox';
   document.getElementById('r_amount').innerText = Number(amount).toLocaleString('en-US') + ' Robux';
 
   const main = document.querySelector('.tool-container');
